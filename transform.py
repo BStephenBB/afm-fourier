@@ -71,10 +71,20 @@ axis3.imshow(np.real(transform_without_peaks))
 
 reverse = ifft2(transform_without_peaks)
 axis4.set_title('Invert Transform')
+
 axis4.imshow(np.real(reverse))
 # axis.imshow(np.real(transform), cmap=cm.gray)
 
 plt.show()
+
+import csv  
+
+with open('no-peaks.csv', 'w', encoding='UTF8') as f:
+    writer = csv.writer(f)
+
+    # write the data
+    for row in np.real(reverse):
+        writer.writerow(row)
 
 
 # N = 30
