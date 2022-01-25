@@ -28,23 +28,19 @@ def parse_text_blob(blob):
 
 import sys
 import os
+from scipy.fft import ifft2
+import matplotlib.pyplot as plt
+import numpy as np
 
-user_input = input("Enter path to fiducial file:")
+user_input = input("Enter path to fiducial file: ")
  
 assert os.path.exists(user_input), "File count not be found at: "+str(user_input)
 file = open(user_input,'r+')
-#stuff you do with the file goes here
-
-# file = open("./Scan.124.txt")
 
 text = file.read()
 matrix = parse_text_blob(text)
 
 file.close()
-
-from scipy.fft import ifft2
-import matplotlib.pyplot as plt
-import numpy as np
 
 figure, (axis1, axis2, axis3, axis4,) = plt.subplots(4, 1)
 
@@ -57,9 +53,17 @@ axis2.imshow(np.real(transform))
 
 transform_without_peaks = transform
 
+# defaultMaxValue = 1e3;
+
+userMaxValue = input("Max value threshold: ")
+
+assert float(userMaxValue)
+
+maxValue = float(userMaxValue)
+
 for row in range(len(transform_without_peaks)):
     for col in range(len(transform_without_peaks[row])):
-        if abs(np.real(transform_without_peaks[row][col])) > 1e3:
+        if abs(np.real(transform_without_peaks[row][col])) > maxValue:
             transform_without_peaks[row][col] = 0
 
 axis3.set_title('Remove "Dots"')
