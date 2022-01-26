@@ -79,7 +79,7 @@ plt.show()
 
 import csv  
 
-with open('no-peaks.csv', 'w', encoding='UTF8') as f:
+with open(f"{'.'.join(user_input.split('.')[:-1])}-no-peaks.csv", 'w', encoding='UTF8') as f:
     writer = csv.writer(f)
 
     # write the data
