@@ -91,7 +91,8 @@ if not no_graph:
 
     LEFT_CLICK = 1
     def on_click(event):
-        if event.button == LEFT_CLICK and event.inaxes == axis2:
+        # only toggle point for left clicks, on the correct axis, and for double clicks
+        if event.button == LEFT_CLICK and event.inaxes == axis2 and event.dblclick:
             x = round(event.xdata)
             y = round(event.ydata)
             formatted_point = f"[{x},{y}]"
@@ -110,6 +111,9 @@ if not no_graph:
             plt.gcf().canvas.draw_idle()
 
     connection_id = figure.canvas.mpl_connect('button_press_event', on_click)
+
+    plt.get_current_fig_manager().full_screen_toggle() # toggle fullscreen mode
+
     plt.show()
     figure.canvas.mpl_disconnect(connection_id)
 
