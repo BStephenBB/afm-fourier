@@ -73,8 +73,27 @@ transform = fft2(matrix)
 
 transformed_data = deepcopy(transform)
 transformed_back_data = ifft2(transformed_data)
+final_data = None
 
 points_removed = {}
+
+class Writer:
+    def __init__(self, data):
+        self.data = data
+
+    def update_data(self, data):
+        self.data = data
+
+    def write(self):
+        # write data to output file
+        with open(f"{'.'.join(file_path.split('.')[:-1])}_sans{'_'.join(points_removed.keys())}.csv", 'w', encoding='UTF8') as f:
+            writer = csv.writer(f)
+            # write the data
+            for row in np.real(self.data):
+                writer.writerow(row)
+
+
+writer = Writer(transformed_back_data)
 
 # only plot if the no_graph option hasn't been specified
 if not no_graph:
@@ -107,6 +126,7 @@ if not no_graph:
             # recaculate transforms and re-draw graphs:
             axis2.imshow(np.real(transformed_data))
             transformed_back_data = ifft2(transformed_data)
+            writer.update_data(transformed_back_data)
             axis3.imshow(np.real(transformed_back_data))
             plt.gcf().canvas.draw_idle()
 
@@ -118,9 +138,15 @@ if not no_graph:
     figure.canvas.mpl_disconnect(connection_id)
 
 
-# write data to output file
-with open(f"{'.'.join(file_path.split('.')[:-1])}_sans{'_'.join(points_removed.keys())}.csv", 'w', encoding='UTF8') as f:
-    writer = csv.writer(f)
-    # write the data
-    for row in np.real(transformed_back_data):
-        writer.writerow(row)
+writer.write()
+# # write data to output file
+# with open(f"{'.'.join(file_path.split('.')[:-1])}_sans{'_'.join(points_removed.keys())}.csv", 'w', encoding='UTF8') as f:
+#     writer = csv.writer(f)
+#     # write the data
+#     if final_data: 
+#         for row in np.real(final_data):
+#             writer.writerow(row)
+#     else:
+#         for row in np.real(transformed_back_data):
+#             writer.writerow(row)
+
