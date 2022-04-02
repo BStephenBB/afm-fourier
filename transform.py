@@ -112,15 +112,15 @@ writer = Writer(transformed_back_data)
 # only plot if the no_graph option hasn't been specified
 if not no_graph:
     # plot everything
-    figure, (axis1, axis2, axis3,) = plt.subplots(3, 1)
+    figure, (axis1, axis2, axis3, axis4) = plt.subplots(4, 1)
     axis1.set_title("Original Data")
     axis1.imshow(matrix)
-    axis2.set_title("Fourier Transform")
+    axis2.set_title("Fourier Transform - Real")
     axis2.imshow(np.real(transformed_data))
-    # axis3.set_title('Remove "Dwow"')
-    # axis3.imshow(np.real(transform_without_peaks))
-    axis3.set_title("Invert Transform")
-    axis3.imshow(np.real(transformed_back_data))
+    axis3.set_title("Fourier Transform - Imaginary")
+    axis3.imshow(np.imag(transformed_data))
+    axis4.set_title("Invert Transform")
+    axis4.imshow(np.real(transformed_back_data))
 
     LEFT_CLICK = 1
 
@@ -142,7 +142,7 @@ if not no_graph:
             axis2.imshow(np.real(transformed_data))
             transformed_back_data = ifft2(transformed_data)
             writer.update_data(transformed_back_data)
-            axis3.imshow(np.real(transformed_back_data))
+            axis4.imshow(np.real(transformed_back_data))
             plt.gcf().canvas.draw_idle()
 
     connection_id = figure.canvas.mpl_connect("button_press_event", on_click)
