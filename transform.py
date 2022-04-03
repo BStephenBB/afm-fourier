@@ -117,7 +117,6 @@ class Writer:
 
 writer = Writer(transformed_back_data)
 
-
 # only plot if the no_graph option hasn't been specified
 if not no_graph:
     log_norm = LogNorm()
@@ -127,10 +126,18 @@ if not no_graph:
     axis1.imshow(matrix)
     axis2.set_title("Fourier Transform - Real")
     # axis2.imshow(np.real(transformed_data), norm=log_norm, cmap="bwr")
-    axis2.imshow(np.real(transformed_data))
+    axis2.imshow(
+        np.real(transformed_data),
+        vmin=min_max["real"]["min"] * 0.1,
+        vmax=min_max["real"]["max"] * 0.1,
+    )
     axis3.set_title("Fourier Transform - Imaginary")
     # axis3.imshow(np.imag(transformed_data), norm=log_norm, cmap="bwr")
-    axis3.imshow(np.imag(transformed_data))
+    axis3.imshow(
+        np.imag(transformed_data),
+        vmin=min_max["imaginary"]["min"] * 0.1,
+        vmax=min_max["imaginary"]["max"] * 0.1,
+    )
     axis4.set_title("Invert Transform")
     axis4.imshow(np.real(transformed_back_data))
 
@@ -156,8 +163,16 @@ if not no_graph:
                 transformed_data[y][x] = 0
 
             # recaculate transforms and re-draw graphs:
-            axis2.imshow(np.real(transformed_data))
-            axis3.imshow(np.imag(transformed_data))
+            axis2.imshow(
+                np.real(transformed_data),
+                vmin=min_max["real"]["min"] * 0.1,
+                vmax=min_max["real"]["max"] * 0.1,
+            )
+            axis3.imshow(
+                np.imag(transformed_data),
+                vmin=min_max["imaginary"]["min"] * 0.1,
+                vmax=min_max["imaginary"]["max"] * 0.1,
+            )
             transformed_back_data = ifft2(transformed_data)
             writer.update_data(transformed_back_data)
             axis4.imshow(np.real(transformed_back_data))
